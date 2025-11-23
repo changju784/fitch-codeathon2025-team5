@@ -1,0 +1,18 @@
+{
+    "model": {
+        "name": "RidgeModel",
+        "params": {
+            "alpha": 1.0
+        }
+    },
+    "preprocessor": {
+        "name": "AbsoluteSectorRevenuePreprocessor",
+        "params": {
+            "encoding": "onehot"
+        }
+    },
+    "trainer": {
+        "n_splits": 5,
+        "log_target": true
+    }
+}

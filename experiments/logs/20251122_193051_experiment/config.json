@@ -1,0 +1,19 @@
+{
+    "model": {
+        "name": "XGBoostModel",
+        "params": {
+            "enable_categorical": true,
+            "tree_method": "hist"
+        }
+    },
+    "preprocessor": {
+        "name": "AbsoluteSectorRevenuePreprocessor",
+        "params": {
+            "encoding": "none"
+        }
+    },
+    "trainer": {
+        "n_splits": 5,
+        "log_target": true
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "model": {
+        "name": "LassoModel",
+        "params": {
+            "alpha": 0.01
+        }
+    },
+    "preprocessor": {
+        "name": "AbsoluteSectorRevenuePreprocessor",
+        "params": {
+            "encoding": "onehot"
+        }
+    },
+    "trainer": {
+        "n_splits": 5,
+        "log_target": true
+    }
+}

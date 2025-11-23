@@ -1,0 +1,22 @@
+{
+    "model": {
+        "name": "CatBoostModel",
+        "params": {
+            "iterations": 500,
+            "depth": 6,
+            "learning_rate": 0.1,
+            "loss_function": "RMSE",
+            "verbose": 0
+        }
+    },
+    "preprocessor": {
+        "name": "AbsoluteSectorRevenuePreprocessor",
+        "params": {
+            "encoding": "none"
+        }
+    },
+    "trainer": {
+        "n_splits": 5,
+        "log_target": true
+    }
+}

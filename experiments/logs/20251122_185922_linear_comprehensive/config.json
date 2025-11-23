@@ -1,0 +1,16 @@
+{
+    "name": "linear_comprehensive",
+    "model": {
+        "name": "LinearRegressionModel",
+        "params": {}
+    },
+    "preprocessor": {
+        "name": "ComprehensivePreprocessor",
+        "params": {}
+    },
+    "trainer": {
+        "n_splits": 5,
+        "random_state": 42,
+        "log_target": true
+    }
+}

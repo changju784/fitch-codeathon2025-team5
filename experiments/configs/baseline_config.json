@@ -1,0 +1,15 @@
+{
+    "name": "baseline_run",
+    "model": {
+        "name": "LinearRegressionModel",
+        "params": {}
+    },
+    "preprocessor": {
+        "name": "CodeathonBaselinePreprocessor",
+        "params": {}
+    },
+    "trainer": {
+        "n_splits": 5,
+        "random_state": 42
+    }
+}

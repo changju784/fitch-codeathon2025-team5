@@ -1,0 +1,17 @@
+{
+    "features": [
+        "revenue",
+        "overall_score",
+        "environmental_score",
+        "social_score",
+        "governance_score",
+        "sect_C_pct",
+        "sect_G_pct",
+        "sect_J_pct",
+        "env_score_adjustment",
+        "sdg_id_3",
+        "sdg_id_9",
+        "region_code_NAM",
+        "region_code_WEU"
+    ]
+}

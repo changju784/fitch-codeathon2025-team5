@@ -1,0 +1,21 @@
+{
+    "name": "catboost_abs_revenue",
+    "model": {
+        "name": "CatBoostModel",
+        "params": {
+            "iterations": 100,
+            "depth": 6,
+            "learning_rate": 0.1,
+            "random_state": 42
+        }
+    },
+    "preprocessor": {
+        "name": "AbsoluteRevenuePreprocessor",
+        "params": {}
+    },
+    "trainer": {
+        "n_splits": 5,
+        "random_state": 42,
+        "log_target": true
+    }
+}

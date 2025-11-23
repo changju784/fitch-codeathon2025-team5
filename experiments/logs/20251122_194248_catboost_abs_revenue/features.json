@@ -1,0 +1,22 @@
+{
+    "features": [
+        "environmental_score",
+        "social_score",
+        "governance_score",
+        "region_group",
+        "sect_C_abs",
+        "sect_G_abs",
+        "sect_J_abs",
+        "sect_M_abs",
+        "sect_N_abs",
+        "sect_OTHER_abs",
+        "env_score_adjustment",
+        "sdg_3",
+        "sdg_7",
+        "sdg_9",
+        "sdg_11",
+        "sdg_12",
+        "sdg_OTHER",
+        "revenue_log"
+    ]
+}

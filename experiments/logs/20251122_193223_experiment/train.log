@@ -1,0 +1,56 @@
+Logging to experiments/logs/20251122_193223_experiment/train.log
+Loading data...
+Initializing preprocessor: AbsoluteSectorRevenuePreprocessor
+Preprocessing data...
+Absolute Sector Revenue Preprocessor: Selected 18 features.
+Categorical Features: ['region_group']
+Selected features (18): ['environmental_score', 'social_score', 'governance_score', 'region_group', 'env_score_adjustment', 'sdg_3', 'sdg_7', 'sdg_9', 'sdg_11', 'sdg_12', 'sdg_OTHER', 'sect_C_revenue', 'sect_G_revenue', 'sect_J_revenue', 'sect_M_revenue', 'sect_N_revenue', 'sect_OTHER_revenue', 'revenue_log']
+Initializing model: CatBoostModel
+
+--- Training Target Scope 1 (CV) ---
+Starting training with 5 folds... (Log Target: True)
+Fold 1/5 - RMSE: 141605.8150, MAE: 60736.2149 | Log RMSE: 2.1398, Log MAE: 1.7635
+Fold 2/5 - RMSE: 113619.0407, MAE: 54124.0362 | Log RMSE: 1.8642, Log MAE: 1.3636
+Fold 3/5 - RMSE: 105377.8900, MAE: 46091.2932 | Log RMSE: 1.6318, Log MAE: 1.2839
+Fold 4/5 - RMSE: 91293.5060, MAE: 40631.0009 | Log RMSE: 2.2089, Log MAE: 1.6989
+Fold 5/5 - RMSE: 96678.2846, MAE: 44976.4456 | Log RMSE: 2.0111, Log MAE: 1.5369
+
+Training Completed.
+Mean RMSE: 109714.9073
+Mean MAE: 49311.7982
+Mean Log RMSE: 1.9712
+Mean Log MAE: 1.5294
+
+Top 5 Worst Predictions (Across all folds):
+       actual     predicted      abs_error
+420  637605.0  27102.414915  610502.585085
+424  631252.0  37060.664827  594191.335173
+150  568478.0  12928.642496  555549.357504
+416  559769.0   5206.740301  554562.259699
+421  598000.0  43661.063096  554338.936904
+
+--- Training Target Scope 2 (CV) ---
+Starting training with 5 folds... (Log Target: True)
+Fold 1/5 - RMSE: 174982.3781, MAE: 62999.4013 | Log RMSE: 2.6849, Log MAE: 2.0076
+Fold 2/5 - RMSE: 194289.0420, MAE: 57947.0452 | Log RMSE: 2.7497, Log MAE: 1.8659
+Fold 3/5 - RMSE: 55271.6873, MAE: 28056.6649 | Log RMSE: 2.4213, Log MAE: 1.6077
+Fold 4/5 - RMSE: 68170.0686, MAE: 28355.7348 | Log RMSE: 2.3877, Log MAE: 1.7290
+Fold 5/5 - RMSE: 288776.3053, MAE: 75309.0334 | Log RMSE: 2.1571, Log MAE: 1.5974
+
+Training Completed.
+Mean RMSE: 156297.8963
+Mean MAE: 50533.5759
+Mean Log RMSE: 2.4801
+Mean Log MAE: 1.7615
+
+Top 5 Worst Predictions (Across all folds):
+        actual     predicted     abs_error
+428  2061608.0  12761.293366  2.048847e+06
+427  1597469.0  12738.285426  1.584731e+06
+426  1503357.0   4414.066317  1.498943e+06
+425  1105788.0  63135.779024  1.042652e+06
+424   862769.0  71469.946222  7.912991e+05
+Metrics saved to metrics.json
+
+--- Training Final Models and Generating Submission ---
+Submission saved to experiments/logs/20251122_193223_experiment/submission.csv
