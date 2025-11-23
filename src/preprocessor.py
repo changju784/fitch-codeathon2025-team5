@@ -840,38 +840,53 @@ class AbsoluteRevenuePreprocessor(BasePreprocessor):
         return X_final
 
 
-class MedianRegressionPreprocessor(BasePreprocessor):
-    def __init__(self):
+class ProposedFeaturePreprocessor(BasePreprocessor):
+    def __init__(self, tree=False):
         self.features = []
         self.one_hot_encoder = None
         self.feature_names = []
+        self.tree = tree
 
     def fit(self, X, y=None):
         # 1. Load auxiliary data
         sect = pd.read_csv("data/revenue_distribution_by_sector.csv")
         env = pd.read_csv("data/environmental_activities.csv")
         
-        self.one_hot_encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
-        
-        # Fit OHE on country_code
-        # Fill NaNs
-        X_temp = X.copy()
-        X_temp['country_code'] = X_temp['country_code'].fillna('Unknown')
-        self.one_hot_encoder.fit(X_temp[['country_code']])
-        
-        # Define feature names
-        cat_feature_names = self.one_hot_encoder.get_feature_names_out(['country_code']).tolist()
-        
-        self.feature_names = [
-            'log_total_revenue',
-            'log_scope1_revenue',
-            'log_scope2_revenue',
-            'scope1_revenue_present',
-            'scope2_revenue_present',
-            'env_adjusted_score',
-            'social_score',
-            'governance_score'
-        ] + cat_feature_names
+        if not self.tree:
+            self.one_hot_encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
+            
+            # Fit OHE on country_code
+            # Fill NaNs
+            X_temp = X.copy()
+            X_temp['country_code'] = X_temp['country_code'].fillna('Unknown')
+            self.one_hot_encoder.fit(X_temp[['country_code']])
+            
+            # Define feature names
+            cat_feature_names = self.one_hot_encoder.get_feature_names_out(['country_code']).tolist()
+            
+            self.feature_names = [
+                'log_total_revenue',
+                'log_scope1_revenue',
+                'log_scope2_revenue',
+                'scope1_revenue_present',
+                'scope2_revenue_present',
+                'env_adjusted_score',
+                'social_score',
+                'governance_score'
+            ] + cat_feature_names
+        else:
+            # For tree models, keep country_code as categorical
+            self.feature_names = [
+                'log_total_revenue',
+                'log_scope1_revenue',
+                'log_scope2_revenue',
+                'scope1_revenue_present',
+                'scope2_revenue_present',
+                'env_adjusted_score',
+                'social_score',
+                'governance_score',
+                'country_code'
+            ]
         
         return self
 
@@ -884,7 +899,7 @@ class MedianRegressionPreprocessor(BasePreprocessor):
         X_temp = X.copy()
         
         # 1. Calculate Scope 1 & 2 Revenue
-        sect_merged = sect.merge(class_df, on='nace_level_1_code', how='left')
+        sect_merged = sect.merge(class_df, on='nace_level_2_name', how='left')
         
         if 'revenue' not in X_temp.columns:
             X_temp['revenue'] = 0
@@ -933,20 +948,37 @@ class MedianRegressionPreprocessor(BasePreprocessor):
         X_temp['social_score'] = X_temp['social_score'].fillna(0)
         X_temp['governance_score'] = X_temp['governance_score'].fillna(0)
         
-        # country_code OHE
+        # Handle country_code: categorical for tree models, one-hot for linear models
         X_temp['country_code'] = X_temp['country_code'].fillna('Unknown')
-        country_encoded = self.one_hot_encoder.transform(X_temp[['country_code']])
-        country_cols = self.one_hot_encoder.get_feature_names_out(['country_code'])
-        country_df = pd.DataFrame(country_encoded, columns=country_cols, index=X_temp.index)
         
-        X_temp = pd.concat([X_temp, country_df], axis=1)
+        if not self.tree:
+            # One-hot encode for linear models
+            country_encoded = self.one_hot_encoder.transform(X_temp[['country_code']])
+            country_cols = self.one_hot_encoder.get_feature_names_out(['country_code'])
+            country_df = pd.DataFrame(country_encoded, columns=country_cols, index=X_temp.index)
+            
+            X_temp = pd.concat([X_temp, country_df], axis=1)
+        else:
+            # Keep as categorical for tree models
+            X_temp['country_code'] = X_temp['country_code'].astype('category')
         
         # Select features
         for col in self.feature_names:
             if col not in X_temp.columns:
+                if self.tree and col == 'country_code':
+                    continue  # Already handled above
                 X_temp[col] = 0
+        
+        # Handle fillna: only fill numeric columns (categorical columns can't have 0 as fillna)
+        result = X_temp[self.feature_names]
+        if self.tree:
+            # Fill only numeric columns
+            numeric_cols = [col for col in self.feature_names if col != 'country_code']
+            result[numeric_cols] = result[numeric_cols].fillna(0)
+        else:
+            result = result.fillna(0)
                 
-        return X_temp[self.feature_names].fillna(0)
+        return result
 
 
 

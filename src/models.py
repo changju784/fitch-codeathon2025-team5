@@ -104,6 +104,7 @@ class XGBoostModel(BaseModel):
             'max_depth': max_depth,
             'learning_rate': learning_rate,
             'random_state': random_state,
+            'objective': 'reg:absoluteerror',  # Optimize for MAE
             'enable_categorical': True,
             'tree_method': 'hist', # Required for categorical support
             'n_jobs': -1
@@ -124,6 +125,7 @@ class CatBoostModel(BaseModel):
             'iterations': iterations,
             'depth': depth,
             'learning_rate': learning_rate,
+            'loss_function': 'MAE',  # Optimize for MAE
             'random_seed': random_state,
             'verbose': 0,
             'allow_writing_files': False
@@ -139,6 +141,41 @@ class CatBoostModel(BaseModel):
     def predict(self, X):
         return self.model.predict(X)
 
+class LogTargetCatBoostModel(BaseModel):
+    def __init__(self, fit_on_log=True, **cb_params):
+        import catboost as cb
+
+        base_params = {
+            "loss_function": "MAE",
+            "verbose": 0,
+            "allow_writing_files": False,
+        }
+
+        base_params.update(cb_params)
+
+        self.params = base_params
+        self.model = cb.CatBoostRegressor(**self.params)
+
+        self.fit_on_log = fit_on_log
+
+    def fit(self, X, y):
+        if self.fit_on_log:
+            y = np.log1p(np.maximum(y, 0))
+
+        cat_features = X.select_dtypes(include=["category", "object"]).columns.tolist()
+
+        self.model.fit(X, y, cat_features=cat_features)
+        return self
+
+    def predict(self, X):
+        pred = self.model.predict(X)
+
+        if self.fit_on_log:
+            pred = np.expm1(pred)
+            pred = np.clip(pred, 0, None)
+
+        return pred
+
 
 from sklearn.linear_model import QuantileRegressor
 
@@ -146,7 +183,7 @@ class MedianRegressionModel(BaseModel):
     def __init__(self):
         self.model = Pipeline([
             ('scaler', StandardScaler()),
-            ('model', QuantileRegressor(quantile=0.5, solver='highs'))
+            ('model', QuantileRegressor(quantile=0.5, solver='highs', alpha=0.0))
         ])
 
     def fit(self, X, y):
@@ -155,3 +192,25 @@ class MedianRegressionModel(BaseModel):
 
     def predict(self, X):
         return self.model.predict(X)
+
+class LogTargetMedianRegressionModel(BaseModel):
+    def __init__(self):
+        self.model = Pipeline([
+            ('scaler', StandardScaler()),
+            ('model', QuantileRegressor(
+                quantile=0.5,
+                solver='highs',
+                alpha=0.0
+            ))
+        ])
+
+    def fit(self, X, y):
+        # log1p transform
+        y_log = np.log1p(y)
+        self.model.fit(X, y_log)
+        return self
+
+    def predict(self, X):
+        y_log_pred = self.model.predict(X)
+        # inverse transform
+        return np.expm1(y_log_pred)
