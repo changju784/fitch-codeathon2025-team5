@@ -1,0 +1,80 @@
+nace_level_2_name,affects_scope_1,affects_scope_2
+Accommodation,True,True
+Activities auxiliary to financial services and insurance activities,False,False
+"Activities of advertising, market research and public relations",False,False
+Activities of head offices and management consultancy,False,False
+Activities of households as employers of domestic personnel,False,True
+Air transport,True,True
+Architectural and engineering activities; technical testing and analysis,False,True
+Civil engineering,True,True
+"Computer programming, consultancy and related activities",False,False
+Construction of residential and non-residential buildings,True,True
+"Creative, arts and entertainment activities",False,False
+"Crop and animal production, hunting and related service activities",True,True
+Education,False,False
+"Electricity, gas, steam and air conditioning supply",True,True
+Employment activities,False,False
+Extraction of crude petroleum and natural gas,True,True
+"Financial service activities, except insurance and pension funding",False,False
+Food and beverage service activities,True,True
+Forestry and logging,True,True
+Gambling and betting activities,False,True
+Human health activities,True,True
+Information service activities,False,False
+"Insurance, reinsurance and pension funding, except compulsory social security",False,False
+Investigation and security activities,True,True
+Land transport and transport via pipelines,True,True
+Legal and accounting activities,False,False
+Manufacture of basic metals,True,True
+Manufacture of basic pharmaceutical products and pharmaceutical preparations,True,True
+Manufacture of beverages,True,True
+Manufacture of chemicals and chemical products,True,True
+"Manufacture of computer, electronic and optical products",True,True
+Manufacture of electrical equipment,True,True
+"Manufacture of fabricated metal products, except machinery and equipment",True,True
+Manufacture of food products,True,True
+Manufacture of furniture,True,True
+Manufacture of leather and related products of other materials,True,True
+Manufacture of machinery and equipment n.e.c.,True,True
+"Manufacture of motor vehicles, trailers and semi-trailers",True,True
+Manufacture of other non-metallic mineral products,True,True
+Manufacture of other transport equipment,True,True
+Manufacture of paper and paper products,True,True
+Manufacture of rubber and plastic products,True,True
+Manufacture of textiles,True,True
+Manufacture of wearing apparel,True,True
+"Manufacture of wood and of products of wood and cork, except furniture; manufacture of articles of straw and plaiting materials",True,True
+Mining of metal ores,True,True
+Mining support service activities,True,True
+"Motion picture, video and television programme production, sound recording and music publishing activities",False,True
+"Office administrative, office support and other business support activities",False,False
+Other manufacturing,True,True
+Other mining and quarrying,True,True
+Other personal service activities,False,True
+"Other professional, scientific and technical activities",False,False
+Postal and courier activities,True,True
+Printing and reproduction of recorded media,True,True
+"Programming, broadcasting, news agency and other content distribution activities",False,True
+Public administration and defence; compulsory social security,True,True
+Publishing activities,False,False
+Real estate activities,True,True
+Remediation activities and other waste management service activities,True,True
+Rental and leasing activities,True,True
+"Repair and maintenance of computers, personal and household goods, and motor vehicles and motorcycles",False,False
+"Repair, maintenance and installation of machinery and equipment",True,True
+Residential care activities,True,True
+Retail trade,True,True
+Scientific research and development,True,True
+Services to buildings and landscape activities,True,True
+Sewerage,True,True
+Social work activities without accommodation,False,False
+Specialised construction activities,True,True
+Sports activities and amusement and recreation activities,True,True
+Telecommunications,False,False
+"Travel agency, tour operator and other reservation service and related activities",False,False
+Veterinary activities,True,True
+"Warehousing, storage and support activities for transportation",True,True
+"Waste collection, recovery and disposal activities",True,True
+Water transport,True,True
+Wholesale and retail trade and repair of motor vehicles and motorcycles,True,True
+"Wholesale trade, except of motor vehicles and motorcycles",True,True

@@ -139,3 +139,19 @@ class CatBoostModel(BaseModel):
     def predict(self, X):
         return self.model.predict(X)
 
+
+from sklearn.linear_model import QuantileRegressor
+
+class MedianRegressionModel(BaseModel):
+    def __init__(self):
+        self.model = Pipeline([
+            ('scaler', StandardScaler()),
+            ('model', QuantileRegressor(quantile=0.5, solver='highs'))
+        ])
+
+    def fit(self, X, y):
+        self.model.fit(X, y)
+        return self
+
+    def predict(self, X):
+        return self.model.predict(X)

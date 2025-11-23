@@ -840,3 +840,113 @@ class AbsoluteRevenuePreprocessor(BasePreprocessor):
         return X_final
 
 
+class MedianRegressionPreprocessor(BasePreprocessor):
+    def __init__(self):
+        self.features = []
+        self.one_hot_encoder = None
+        self.feature_names = []
+
+    def fit(self, X, y=None):
+        # 1. Load auxiliary data
+        sect = pd.read_csv("data/revenue_distribution_by_sector.csv")
+        env = pd.read_csv("data/environmental_activities.csv")
+        
+        self.one_hot_encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
+        
+        # Fit OHE on country_code
+        # Fill NaNs
+        X_temp = X.copy()
+        X_temp['country_code'] = X_temp['country_code'].fillna('Unknown')
+        self.one_hot_encoder.fit(X_temp[['country_code']])
+        
+        # Define feature names
+        cat_feature_names = self.one_hot_encoder.get_feature_names_out(['country_code']).tolist()
+        
+        self.feature_names = [
+            'log_total_revenue',
+            'log_scope1_revenue',
+            'log_scope2_revenue',
+            'scope1_revenue_present',
+            'scope2_revenue_present',
+            'env_adjusted_score',
+            'social_score',
+            'governance_score'
+        ] + cat_feature_names
+        
+        return self
+
+    def transform(self, X):
+        # Load necessary data
+        sect = pd.read_csv("data/revenue_distribution_by_sector.csv")
+        class_df = pd.read_csv("data/sector_emission_scope_classification.csv")
+        env = pd.read_csv("data/environmental_activities.csv")
+        
+        X_temp = X.copy()
+        
+        # 1. Calculate Scope 1 & 2 Revenue
+        sect_merged = sect.merge(class_df, on='nace_level_1_code', how='left')
+        
+        if 'revenue' not in X_temp.columns:
+            X_temp['revenue'] = 0
+            
+        sect_with_rev = sect_merged.merge(X_temp[['entity_id', 'revenue']], on='entity_id', how='inner')
+        
+        sect_with_rev['scope_1_revenue_part'] = sect_with_rev['revenue'] * sect_with_rev['revenue_pct'] * sect_with_rev['affects_scope_1'].fillna(0).astype(int)
+        sect_with_rev['scope_2_revenue_part'] = sect_with_rev['revenue'] * sect_with_rev['revenue_pct'] * sect_with_rev['affects_scope_2'].fillna(0).astype(int)
+        
+        # Aggregate
+        entity_revenue_split = sect_with_rev.groupby('entity_id')[['scope_1_revenue_part', 'scope_2_revenue_part']].sum().reset_index()
+        entity_revenue_split.rename(columns={'scope_1_revenue_part': 'scope_1_revenue', 'scope_2_revenue_part': 'scope_2_revenue'}, inplace=True)
+        
+        # Merge back to X
+        X_temp = X_temp.merge(entity_revenue_split, on='entity_id', how='left')
+        X_temp['scope_1_revenue'] = X_temp['scope_1_revenue'].fillna(0)
+        X_temp['scope_2_revenue'] = X_temp['scope_2_revenue'].fillna(0)
+        
+        # 2. Generate Features
+        
+        # log_total_revenue
+        X_temp['log_total_revenue'] = np.log1p(X_temp['revenue'])
+        
+        # log_scope1_revenue
+        X_temp['log_scope1_revenue'] = np.log1p(X_temp['scope_1_revenue'])
+        
+        # log_scope2_revenue
+        X_temp['log_scope2_revenue'] = np.log1p(X_temp['scope_2_revenue'])
+        
+        # scope1_revenue_present (0/1)
+        X_temp['scope1_revenue_present'] = (X_temp['scope_1_revenue'] > 0).astype(int)
+        
+        # scope2_revenue_present (0/1)
+        X_temp['scope2_revenue_present'] = (X_temp['scope_2_revenue'] > 0).astype(int)
+        
+        # env_adjusted_score
+        env_adj_agg = env.groupby('entity_id')['env_score_adjustment'].sum().reset_index()
+        X_temp = X_temp.merge(env_adj_agg, on='entity_id', how='left')
+        X_temp['env_score_adjustment'] = X_temp['env_score_adjustment'].fillna(0)
+        
+        if 'environmental_score' in X_temp.columns:
+             X_temp['env_adjusted_score'] = X_temp['environmental_score'] + X_temp['env_score_adjustment']
+        else:
+             X_temp['env_adjusted_score'] = 0
+             
+        X_temp['social_score'] = X_temp['social_score'].fillna(0)
+        X_temp['governance_score'] = X_temp['governance_score'].fillna(0)
+        
+        # country_code OHE
+        X_temp['country_code'] = X_temp['country_code'].fillna('Unknown')
+        country_encoded = self.one_hot_encoder.transform(X_temp[['country_code']])
+        country_cols = self.one_hot_encoder.get_feature_names_out(['country_code'])
+        country_df = pd.DataFrame(country_encoded, columns=country_cols, index=X_temp.index)
+        
+        X_temp = pd.concat([X_temp, country_df], axis=1)
+        
+        # Select features
+        for col in self.feature_names:
+            if col not in X_temp.columns:
+                X_temp[col] = 0
+                
+        return X_temp[self.feature_names].fillna(0)
+
+
+
