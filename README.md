@@ -51,7 +51,7 @@ The conclusion synthesizes the main findings: domain-informed feature engineerin
 
 ## Using This Repository
 
-The code referenced in `final.md` assumes a standard structure with a `data/` directory (containing `train.csv` and `test.csv`) and a `src/` package with modules such as `preprocessor.py`, `models.py`, and `trainer.py`.  
+The code referenced in `final.ipynb` and `final.md` assumes a standard structure with a `data/` directory (containing `train.csv` and `test.csv`) and a `src/` package with modules such as `preprocessor.py`, `models.py`, and `trainer.py`.  
 To reproduce the experiments and final submission:
 
 1. Use Python 3.10+ (or similar) and install all required packages via:
@@ -61,4 +61,4 @@ To reproduce the experiments and final submission:
 2. Prepare the input data under `data/` with the same schema as used in the Codeathon.
 3. Follow the code snippets in [Section 7](final.md#7-experiments), [Section 8](final.md#8-catboost-hyperparameter-optimization), and [Section 9](final.md#9-final-prediction-submissioncsv) to run experiments and generate `submission.csv`.
 
-For a full narrative, implementation details, and discussion of limitations, please refer to [`final.md`](final.md).
+For a full narrative, implementation details, and discussion of limitations, please refer to [`final.ipynb`](final.ipynb) and [`final.md`](final.md).
