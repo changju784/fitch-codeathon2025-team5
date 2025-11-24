@@ -3,6 +3,8 @@
 This repository contains our end-to-end solution for the FitchGroup Codeathon 2025, where we develop machine learning models to estimate corporate Scope 1 and Scope 2 greenhouse gas emissions from partial financial and ESG disclosures.  
 The full technical report, code snippets, and detailed analysis are documented in [`final.md`](final.md); this README provides a concise, section-by-section overview and links to the corresponding parts of the report.
 
+Live demo video link - https://www.youtube.com/watch?v=g0D5z0ApbIA
+
 ---
 
 ## Notebook Section Overview
@@ -62,3 +64,4 @@ To reproduce the experiments and final submission:
 3. Follow the code snippets in [Section 7](final.md#7-experiments), [Section 8](final.md#8-catboost-hyperparameter-optimization), and [Section 9](final.md#9-final-prediction-submissioncsv) to run experiments and generate `submission.csv`.
 
 For a full narrative, implementation details, and discussion of limitations, please refer to [`final.ipynb`](final.ipynb) and [`final.md`](final.md).
+
