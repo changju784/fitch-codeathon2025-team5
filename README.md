@@ -9,6 +9,8 @@ Test Set Prediction: [`submission.csv`](https://github.com/changju784/fitch-code
 
 Live demo video link - https://www.youtube.com/watch?v=g0D5z0ApbIA
 
+Dev Post Project: [Link](https://devpost.com/software/team-5-200-s-wacker)
+
 ---
 
 ## Notebook Section Overview
@@ -68,6 +70,7 @@ To reproduce the experiments and final submission:
 3. Follow the code snippets in [Section 7](final.md#7-experiments), [Section 8](final.md#8-catboost-hyperparameter-optimization), and [Section 9](final.md#9-final-prediction-submissioncsv) to run experiments and generate `submission.csv`.
 
 For a full narrative, implementation details, and discussion of limitations, please refer to [`final.ipynb`](final.ipynb) and [`final.md`](final.md).
+
 
 
 
